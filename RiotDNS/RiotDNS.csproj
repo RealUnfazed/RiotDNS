@@ -77,6 +77,7 @@
     <Compile Include="Core\AutoUpdater.cs" />
     <Compile Include="Core\Controller.cs" />
     <Compile Include="Core\DNSService.cs" />
+    <Compile Include="Core\NetworkAdapterInfo.cs" />
     <Compile Include="Core\Settings.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -28,7 +28,7 @@ namespace RiotDNS
         private string updateXml;
         public AutoUpdater(TextBlock tagLbl)
         {
-            updateXmlUrl = "https://raw.githubusercontent.com/AlirezaPlusOfficial/RiotDNS/master/Builds/data.xml";
+            updateXmlUrl = "https://unfazed.ir/riotdns/content/info.xml";
             applicationPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             applicationName = "RiotDNS";
             currentVersion = new Version(Setting.GetRDVersion());

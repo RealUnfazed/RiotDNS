@@ -12,7 +12,7 @@ namespace RiotDNS
     {
         public bool devMode = false;
         public string buildType = "N/A";
-        public readonly string[] dnsServers = { "Radar Game", "Electro", "Shecan", "Begzar", "Anti 403", "OpenDNS", "CloudFlare", "Google", "Quad9", "KeepSolid" };
+        public readonly string[] dnsServers = { "Radar Game", "Electro", "Shecan", "Begzar", "Anti 403", "OpenDNS", "CloudFlare", "Google", "Quad9", "KeepSolid", "Shelter Free" };
         public readonly string[] radarAdr = { "10.202.10.10", "10.202.10.11" };
         public readonly string[] electroAdr = { "78.157.42.100", "78.157.42.101" };
         public readonly string[] shecanAdr = { "178.22.122.100", "185.51.200.2" };
@@ -23,6 +23,7 @@ namespace RiotDNS
         public readonly string[] googleAdr = { "8.8.8.8", "8.8.4.4" };
         public readonly string[] quad9Adr = { "9.9.9.9", "149.112.112.112" };
         public readonly string[] keepsolidAdr = { "62.210.136.158", "69.162.67.202" };
+        public readonly string[] shelterfreeAdr = { "78.157.32.202", "78.157.32.205" };
         private string appVersion;
 
         public bool CheckAdmin()

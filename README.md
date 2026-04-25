@@ -4,7 +4,7 @@
 [![Downloads](https://img.shields.io/github/downloads/RealUnfazed/RiotDNS/total.svg)](https://github.com/RealUnfazed/RiotDNS/releases)
 [![Discord](https://img.shields.io/discord/796410664460877865?label=discord)](https://discord.gg/tUa4V9S3MF)
 [![Donate](https://img.shields.io/badge/donate-$$$-8a2be2.svg)](#)
-[![Alireza Plus](https://img.shields.io/badge/Alireza-Plus-e4181c.svg?labelColor=0000ff)](#)
+[![RealUnfazed](https://img.shields.io/badge/RealUnfazed-e4181c.svg?labelColor=0000ff)](#)
 
 # RiotDNS
 RiotDNS — Switch Your Windows DNS Fast & Easy!
@@ -79,9 +79,23 @@ v2.0.2.6 :
 v2.0.2.7 :
 <br>
 ✅ Library updates!
+<br><br>
+v2.0.3.0 :
+<br>
+✅ New DNS Server!
+<br>
+✅ Updater improvements!
+<br>
+✅ Adapter selection!
+<br>
+✅ Fixed: Multiple adapters now work correctly.
 # Known Issue's
-⚠ Application Core: The app may not work correctly if multiple network adapters are active.
+Please open an issue for it.
 # ToDo List
+💢 Notifications on opening.
+<br>
+💢 ONLINE Server import and offline as fallback.
+<br>
 💢 Add a custom section to let users add their own DNS servers.
 <br>
 💢 And much more :)

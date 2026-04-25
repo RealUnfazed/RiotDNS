@@ -31,7 +31,7 @@ namespace RiotDNS.Updater
 
         private void RiotDNSUpdater_Load(object sender, EventArgs e)
         {
-            updateXmlUrl = "https://raw.githubusercontent.com/AlirezaPlusOfficial/RiotDNS/master/Builds/data.xml";
+            updateXmlUrl = "https://unfazed.ir/riotdns/content/info.xml";
             try
             {
                 applicationPath = Path.GetDirectoryName(Application.ExecutablePath);

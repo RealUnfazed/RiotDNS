@@ -1,43 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Threading;
-using System.Reflection;
-using System.Security.Principal;
-using System.Management;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using AlirezaPlus;
-
-
 
 namespace RiotDNS
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         Controller controller = new Controller();
         Settings settings = new Settings();
         DNSService DNS = new DNSService();
         string SetMyDNS = String.Empty;
+        private List<NetworkAdapterInfo> networkAdapters;
+        private NetworkAdapterInfo selectedAdapter;
 
         public MainWindow()
         {
             InitializeComponent();
+            InitializeExceptionHandlers();
+            CheckAdminPrivileges();
+            InitializeApp();
+            LoadNetworkAdapters();
+        }
 
+        private void LoadNetworkAdapters()
+        {
+            try
+            {
+                networkAdapters = NetworkAdapterHelper.GetActiveAdapters();
+                adapterCombo.ItemsSource = networkAdapters;
+
+                if (networkAdapters.Count > 0)
+                {
+                    // Select primary adapter or first one
+                    selectedAdapter = networkAdapters.FirstOrDefault(a => a.IsPrimary) ?? networkAdapters.First();
+                    adapterCombo.SelectedItem = selectedAdapter;
+
+                    if (networkAdapters.Count > 1)
+                    {
+                        statusText.Text = $"{networkAdapters.Count} adapters found. Select one.";
+                    }
+                    else
+                    {
+                        statusText.Text = $"Selected: {selectedAdapter.Name}";
+                    }
+
+                    // Enable toggle button if both adapter and DNS are selected
+                    UpdateToggleButtonState();
+                }
+                else
+                {
+                    statusText.Text = "No active network adapters found";
+                    Tg_btn.IsEnabled = false;
+                }
+
+                controller.LogWrite($"Loaded {networkAdapters.Count} network adapters");
+            }
+            catch (Exception ex)
+            {
+                controller.LogWrite($"Error loading adapters: {ex.Message}");
+                statusText.Text = "Error loading adapters";
+            }
+        }
+
+        private void InitializeExceptionHandlers()
+        {
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 if (e.ExceptionObject is Exception ex)
@@ -56,39 +86,36 @@ namespace RiotDNS
                 {
                     controller.LogWrite($"Task Exception: {ex.Message}\n{ex.StackTrace}");
                 }
-
                 e.SetObserved();
             };
 
-            controller.LogWrite("GLOBAL EXCEPTION HANDLERS INITIALIZIED.");
+            controller.LogWrite("GLOBAL EXCEPTION HANDLERS INITIALIZED.");
+        }
 
+        private void CheckAdminPrivileges()
+        {
+            if (settings.CheckAdmin() == false)
+            {
+                MessageBoxResult result = MessageBox.Show("This application must be run as an administrator.", "ERROR CODE ( RD1 )", MessageBoxButton.OK, MessageBoxImage.Error);
+                controller.LogWrite("APPLICATION ACCESS DENIED! ( RD1 )");
+                if (result == MessageBoxResult.OK)
+                {
+                    Application.Current.Shutdown();
+                }
+            }
+        }
 
-
-
+        private void InitializeApp()
+        {
             try
             {
                 UserTracker.Track(settings.GetRDVersion(), settings.GetAppName());
                 controller.LogWrite("APP STARTED v" + settings.GetRDVersion());
             }
-            catch (Exception)
-            {
-            }
-
-            if (settings.CheckAdmin() == false)
-            {
-                //display message and exit
-                MessageBoxResult result = MessageBox.Show("This application must be run as an administrator.", "ERROR CODE ( RD1 )", MessageBoxButton.OK, MessageBoxImage.Error);
-                controller.LogWrite("APPLICATION ACCESS TO UPDATE ITSELF DENIED CAUSE OF ADMIN PRIVILAGES! ( RD1 )");
-                if (result != MessageBoxResult.OK)
-                {
-                    System.Windows.Application.Current.Shutdown();             
-                }
-            }
-
+            catch (Exception) { }
 
             try
             {
-
                 if (settings.devMode != true)
                 {
                     controller.LogWrite("THE UPDATER WAS CALLED");
@@ -99,115 +126,119 @@ namespace RiotDNS
                 {
                     controller.LogWrite("DEV MODE IS NOT ENABLED!");
                 }
-
             }
             catch (Exception ex)
             {
-                // Handle any errors that occur during the update process
                 MessageBox.Show("Error checking for updates: " + ex.Message);
                 controller.LogWrite("CRASH ON CHECKING DEV MODE : " + ex.Message + "( RD-1 )");
-                Close();
             }
-
-            //tagLbl.Text = settings.buildType + " " + "v" + settings.GetRDVersion();
-
 
             foreach (string item in settings.dnsServers)
             {
                 dnsCombo.Items.Add(item);
             }
-            dnsCombo.SelectedIndex = 0; // -1 Default | +1 Indexes...
+            dnsCombo.SelectedIndex = 0;
             controller.LogWrite("SERVERS IMPORTED");
-
-
         }
 
-        
-        
-        
+        private void AdapterCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (adapterCombo.SelectedItem is NetworkAdapterInfo adapter)
+            {
+                selectedAdapter = adapter;
+                statusText.Text = $"Selected: {adapter.Name} ({adapter.IPAddress})";
+                UpdateToggleButtonState();
+                controller.LogWrite($"Adapter selected: {adapter.Name}");
+            }
+        }
+
+        private void UpdateToggleButtonState()
+        {
+            // Enable toggle button only if adapter is selected and DNS is selected
+            Tg_btn.IsEnabled = selectedAdapter != null && dnsCombo.SelectedIndex >= 0;
+        }
+
+        private async void Tg_btn_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if ((bool)Tg_btn.IsChecked)
+                {
+                    // CONNECT
+                    dnsCombo.IsEnabled = false;
+                    adapterCombo.IsEnabled = false;
+
+                    if (selectedAdapter == null)
+                    {
+                        MessageBox.Show("Please select a network adapter first.", "No Adapter Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        Tg_btn.IsChecked = false;
+                        return;
+                    }
+
+                    string dnsName = dnsCombo.SelectedItem.ToString();
+                    tagLbl.Text = $"CONNECTING To {dnsName}";
+
+                    // Set DNS on selected adapter
+                    SetMyDNS = DNS.SetDNSForAdapter(dnsName, selectedAdapter.Id);
+
+                    // Get ping
+                    string pingResult = await controller.GetServerPing(dnsName);
+
+                    tagLbl.Text = $"{SetMyDNS} - Ping: {pingResult}";
+                    statusText.Text = $"Connected to {dnsName} on {selectedAdapter.Name}";
+                }
+                else
+                {
+                    // DISCONNECT
+                    dnsCombo.IsEnabled = true;
+                    adapterCombo.IsEnabled = true;
+
+                    // Clear DNS on selected adapter
+                    if (selectedAdapter != null)
+                    {
+                        DNS.ClearDNSForAdapter(selectedAdapter.Id);
+                        tagLbl.Text = $"DISCONNECTED from {selectedAdapter.Name}";
+                    }
+                    else
+                    {
+                        DNS.ClearDNS();
+                        tagLbl.Text = "DISCONNECTED";
+                    }
+
+                    statusText.Text = selectedAdapter != null ?
+                        $"Selected: {selectedAdapter.Name}" :
+                        "Select adapter";
+                }
+
+                controller.LogWrite($"MAIN BUTTON TOGGLED! State: {(bool)Tg_btn.IsChecked}");
+            }
+            catch (Exception ex)
+            {
+                controller.LogWrite($"Error in toggle button: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Tg_btn.IsChecked = false;
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Auto-select first adapter on load
+            if (adapterCombo.Items.Count > 0)
+            {
+                adapterCombo.SelectedIndex = 0;
+            }
+        }
 
         private void Close_App_Click(object sender, RoutedEventArgs e)
         {
             controller.LogWrite("APPLICATION CLOSED");
             Close();
-
         }
 
-        private async void Tg_btn_Checked(object sender, RoutedEventArgs e)
+        // Optional: Refresh adapters button handler
+        private void RefreshAdapters_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool) Tg_btn.IsChecked)
-            {
-                dnsCombo.IsEnabled = !dnsCombo.IsEnabled;
-                if (dnsCombo.SelectedIndex == 0)
-                {
-                    SetMyDNS = DNS.SetDNS("Radar Game");
-                    tagLbl.Text = "CONNECTING To Radar Game";
-                    SetMyDNS += " " + await controller.GetServerPing("Radar Game");
-                }
-                else if (dnsCombo.SelectedIndex == 1)
-                {
-                    SetMyDNS = DNS.SetDNS("Electro");
-                    tagLbl.Text = "CONNECTING To Electro";
-                    SetMyDNS += " " + await controller.GetServerPing("Electro");
-                }
-                else if (dnsCombo.SelectedIndex == 2)
-                {
-                    SetMyDNS = DNS.SetDNS("Shecan");
-                    tagLbl.Text = "CONNECTING To Shecan";
-                    SetMyDNS += " " + await controller.GetServerPing("Shecan");
-                }
-                else if (dnsCombo.SelectedIndex == 3)
-                {
-                    SetMyDNS = DNS.SetDNS("Begzar");
-                    tagLbl.Text = "CONNECTING To Begzar";
-                    SetMyDNS += " " + await controller.GetServerPing("Begzar");
-                }
-                else if (dnsCombo.SelectedIndex == 4)
-                {
-                    SetMyDNS = DNS.SetDNS("Anti 403");
-                    tagLbl.Text = "CONNECTING To Anti 403";
-                    SetMyDNS += " " + await controller.GetServerPing("Anti 403");
-                }
-                else if (dnsCombo.SelectedIndex == 5)
-                {
-                    SetMyDNS = DNS.SetDNS("OpenDNS");
-                    tagLbl.Text = "CONNECTING To OpenDNS";
-                    SetMyDNS += " " + await controller.GetServerPing("OpenDNS");
-                }
-                else if (dnsCombo.SelectedIndex == 6)
-                {
-                    SetMyDNS = DNS.SetDNS("CloudFlare");
-                    tagLbl.Text = "CONNECTING To CloudFlare";
-                    SetMyDNS += " " + await controller.GetServerPing("CloudFlare");
-                }
-                else if (dnsCombo.SelectedIndex == 7)
-                {
-                    SetMyDNS = DNS.SetDNS("Google");
-                    tagLbl.Text = "CONNECTING To Google";
-                    SetMyDNS += " " + await controller.GetServerPing("Google");
-                }
-                else if (dnsCombo.SelectedIndex == 8)
-                {
-                    SetMyDNS = DNS.SetDNS("Quad 9");
-                    tagLbl.Text = "CONNECTING To Quad 9";
-                    SetMyDNS += " " + await controller.GetServerPing("Quad 9");
-                }
-                else if (dnsCombo.SelectedIndex == 9)
-                {
-                    SetMyDNS = DNS.SetDNS("KeepSolid");
-                    tagLbl.Text = "CONNECTING To KeepSolid";
-                    SetMyDNS += " " + await controller.GetServerPing("KeepSolid");
-                }
-                tagLbl.Text = SetMyDNS;
-            } 
-            else
-            {
-                dnsCombo.IsEnabled = !dnsCombo.IsEnabled;
-                DNS.ClearDNS();
-                tagLbl.Text = "DISCONNECTED";
-            }
-            controller.LogWrite("MAIN BUTTON TOGGLED!");
+            LoadNetworkAdapters();
         }
-
     }
 }

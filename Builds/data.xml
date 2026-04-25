@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-  <version>2.0.2.7</version>
-  <url>https://github.com/AlirezaPlusOfficial/RiotDNS/blob/master/Builds/RiotDNS_v2.0.2.7r.zip?raw=true</url>
+  <version>2.0.2.4</version>
+  <url>https://github.com/AlirezaPlusOfficial/RiotDNS/blob/master/Builds/RiotDNS_v2.0.2.4r.zip?raw=true</url>
   <message>A new version of RiotDNS is now available. Please update the software!</message>
   <auto>true</auto>
 </update>

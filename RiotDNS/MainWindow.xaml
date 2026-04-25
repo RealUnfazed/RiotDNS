@@ -11,17 +11,72 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent"
+        Loaded="Window_Loaded">
 
-    <Grid>
-
+    <Grid RenderTransformOrigin="0.502,0.538">
         <Border Background="#2A2C2D"
                 CornerRadius="30"
                 BorderBrush="#EFEFEF"
-                BorderThickness="10" >
-            <ComboBox x:Name="dnsCombo" Margin="0,82,0,0" RenderTransformOrigin="0.502,0.577" HorizontalAlignment="Center" VerticalAlignment="Top" Width="178"/>
+                BorderThickness="10" RenderTransformOrigin="0.502,0.53">
+
+            <StackPanel VerticalAlignment="Top" Margin="0,50,0,0">
+                <!-- Adapter Selection -->
+                <Border Background="#1E1F20" 
+                        CornerRadius="10"
+                        Height="35"
+                        Width="250"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10">
+                    <ComboBox x:Name="adapterCombo"
+                              Background="Transparent"
+                              Foreground="Black"
+                              BorderBrush="Transparent"
+                              FontFamily="Fonts/#Kanit Medium"
+                              FontSize="12"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              SelectionChanged="AdapterCombo_SelectionChanged"
+                              ToolTip="Select network adapter"/>
+                </Border>
+
+                <!-- DNS Selection -->
+                <Border Background="#1E1F20" 
+                        CornerRadius="10"
+                        Height="35"
+                        Width="250"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,20">
+                    <ComboBox x:Name="dnsCombo"
+                              Background="Transparent"
+                              Foreground="Black"
+                              BorderBrush="Transparent"
+                              FontFamily="Fonts/#Kanit Medium"
+                              FontSize="12"
+                              HorizontalContentAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              ToolTip="Select DNS server"/>
+                </Border>
+                <Border Background="#1E1F20" 
+                        CornerRadius="8"
+                        Height="25"
+                        Width="220"
+                        >
+                    <TextBlock x:Name="statusText"
+                               Text="Select adapter and DNS"
+                               Foreground="#A9C220"
+                               FontSize="11"
+                               FontFamily="Fonts/#Kanit Medium"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Current Status Display -->
+            </StackPanel>
+
         </Border>
 
+        <!-- Rest of your existing XAML remains the same -->
         <Border Background="#EFEFEF"
                 Height="40"
                 Width="220"
@@ -47,7 +102,7 @@
                 Margin="0,0,0,7"
                 CornerRadius="5,5,0,0">
 
-            <TextBlock x:Name="tagLbl" Text="CHOOSE   SET   WE'RE READY"
+            <TextBlock x:Name="tagLbl" Text="CHOOSE • SET • WE'RE READY"
                        Foreground="#2A2C2D"
                        FontSize="11"
                        FontFamily="Fonts/#Kanit Medium"
@@ -57,58 +112,76 @@
         </Border>
 
         <!--Ellipse - G1-->
-
         <Ellipse x:Name="EG_1"
-                 Height="100"
-                 Width="100"
-                 Fill="#A9C220"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center" />
+         Height="100" Width="100"
+         Fill="#A9C220"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top" Margin="0,220,0,0"
+         RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
 
         <!--Ellipse - G2-->
-
         <Ellipse x:Name="EG_2"
-                 Height="100"
-                 Width="100"
-                 Fill="#A9C220"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center" />
+         Height="100" Width="100"
+         Fill="#A9C220"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top" Margin="0,220,0,0"
+         RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
 
         <!--Ellipse - G3-->
-
         <Ellipse x:Name="EG_3"
-                 Height="100"
-                 Width="100"
-                 Fill="#A9C220"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center" />
+         Height="100" Width="100"
+         Fill="#A9C220"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top" Margin="0,220,0,0"
+         RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
 
         <!--Ellipse - R1-->
-
         <Ellipse x:Name="ER_1"
-                 Height="100"
-                 Width="100"
-                 Fill="#FF5231"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center" />
+         Height="100" Width="100"
+         Fill="#FF5231"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top" Margin="0,220,0,0"
+         RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
 
         <!--Ellipse - R2-->
-
         <Ellipse x:Name="ER_2"
-                 Height="100"
-                 Width="100"
-                 Fill="#FF5231"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center" />
+         Height="100" Width="100"
+         Fill="#FF5231"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top" Margin="0,220,0,0"
+         RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
 
         <!--Ellipse - R3-->
-
         <Ellipse x:Name="ER_3"
-                 Height="100"
-                 Width="100"
-                 Fill="#FF5231"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center" />
+         Height="100" Width="100"
+         Fill="#FF5231"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Top" Margin="0,220,0,0"
+         RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Ellipse.RenderTransform>
+        </Ellipse>
 
         <!--// Toggle Button //-->
 
@@ -116,10 +189,10 @@
                       Height="110"
                       Width="110"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
+                      VerticalAlignment="Top"
                       Click="Tg_btn_Checked"
                       Style="{StaticResource TgBtnStyle}"
-                      >
+                      IsEnabled="False" Margin="0,216,0,0">
 
             <ToggleButton.Triggers>
 
@@ -132,82 +205,64 @@
                             <Storyboard>
 
                                 <!--G1 Animation-->
-
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:03"
-                                                 From="100"
-                                                 To="300"
-                                                 Storyboard.TargetProperty="(Ellipse.Width)"
-                                                 Storyboard.TargetName="EG_1"
-                                                 RepeatBehavior="Forever" />
-
+                                     Duration="00:00:03"
+                                     From="1" To="3"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleX)"
+                                     Storyboard.TargetName="EG_1"
+                                     RepeatBehavior="Forever" />
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:03"
-                                                 From="100"
-                                                 To="300"
-                                                 Storyboard.TargetProperty="(Ellipse.Height)"
-                                                 Storyboard.TargetName="EG_1"
-                                                 RepeatBehavior="Forever" />
-
+                                     Duration="00:00:03"
+                                     From="1" To="3"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleY)"
+                                     Storyboard.TargetName="EG_1"
+                                     RepeatBehavior="Forever" />
                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                 Storyboard.TargetName="EG_1"
-                                                 From="1.0"
-                                                 To="0.0"
-                                                 BeginTime="00:00:00"
-                                                 Duration="00:00:03"
-                                                 RepeatBehavior="Forever" />
+                                     Storyboard.TargetName="EG_1"
+                                     From="1.0" To="0.0"
+                                     BeginTime="00:00:00"
+                                     Duration="00:00:03"
+                                     RepeatBehavior="Forever" />
 
                                 <!--G2 Animation-->
-
                                 <DoubleAnimation BeginTime="00:00:01"
-                                                 Duration="00:00:03"
-                                                 From="100"
-                                                 To="300"
-                                                 Storyboard.TargetProperty="(Ellipse.Width)"
-                                                 Storyboard.TargetName="EG_2"
-                                                 RepeatBehavior="Forever" />
-
+                                     Duration="00:00:03"
+                                     From="1" To="3"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleX)"
+                                     Storyboard.TargetName="EG_2"
+                                     RepeatBehavior="Forever" />
                                 <DoubleAnimation BeginTime="00:00:01"
-                                                 Duration="00:00:03"
-                                                 From="100"
-                                                 To="300"
-                                                 Storyboard.TargetProperty="(Ellipse.Height)"
-                                                 Storyboard.TargetName="EG_2"
-                                                 RepeatBehavior="Forever" />
-
+                                     Duration="00:00:03"
+                                     From="1" To="3"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleY)"
+                                     Storyboard.TargetName="EG_2"
+                                     RepeatBehavior="Forever" />
                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                 Storyboard.TargetName="EG_2"
-                                                 From="1.0"
-                                                 To="0.0"
-                                                 BeginTime="00:00:01"
-                                                 Duration="00:00:03"
-                                                 RepeatBehavior="Forever" />
+                                     Storyboard.TargetName="EG_2"
+                                     From="1.0" To="0.0"
+                                     BeginTime="00:00:01"
+                                     Duration="00:00:03"
+                                     RepeatBehavior="Forever" />
 
                                 <!--G3 Animation-->
-
                                 <DoubleAnimation BeginTime="00:00:02"
-                                                 Duration="00:00:03"
-                                                 From="100"
-                                                 To="300"
-                                                 Storyboard.TargetProperty="(Ellipse.Width)"
-                                                 Storyboard.TargetName="EG_3"
-                                                 RepeatBehavior="Forever" />
-
+                                     Duration="00:00:03"
+                                     From="1" To="3"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleX)"
+                                     Storyboard.TargetName="EG_3"
+                                     RepeatBehavior="Forever" />
                                 <DoubleAnimation BeginTime="00:00:02"
-                                                 Duration="00:00:03"
-                                                 From="100"
-                                                 To="300"
-                                                 Storyboard.TargetProperty="(Ellipse.Height)"
-                                                 Storyboard.TargetName="EG_3"
-                                                 RepeatBehavior="Forever" />
-
+                                     Duration="00:00:03"
+                                     From="1" To="3"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleY)"
+                                     Storyboard.TargetName="EG_3"
+                                     RepeatBehavior="Forever" />
                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                 Storyboard.TargetName="EG_3"
-                                                 From="1.0"
-                                                 To="0.0"
-                                                 BeginTime="00:00:02"
-                                                 Duration="00:00:03"
-                                                 RepeatBehavior="Forever" />
+                                     Storyboard.TargetName="EG_3"
+                                     From="1.0" To="0.0"
+                                     BeginTime="00:00:02"
+                                     Duration="00:00:03"
+                                     RepeatBehavior="Forever" />
 
 
                             </Storyboard>
@@ -229,73 +284,55 @@
                             <Storyboard>
 
                                 <!--R1 Animation-->
-
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:03"
-                                                 From="300"
-                                                 To="100"
-                                                 Storyboard.TargetProperty="(Ellipse.Width)"
-                                                 Storyboard.TargetName="ER_1" />
-
+                                     Duration="00:00:03"
+                                     From="3" To="1"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleX)"
+                                     Storyboard.TargetName="ER_1" />
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:03"
-                                                 From="300"
-                                                 To="100"
-                                                 Storyboard.TargetProperty="(Ellipse.Height)"
-                                                 Storyboard.TargetName="ER_1" />
-
+                                     Duration="00:00:03"
+                                     From="3" To="1"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleY)"
+                                     Storyboard.TargetName="ER_1" />
                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                 Storyboard.TargetName="ER_1"
-                                                 From="0.0"
-                                                 To="1.0"
-                                                 BeginTime="00:00:00"
-                                                 Duration="00:00:03" />
+                                     Storyboard.TargetName="ER_1"
+                                     From="0.0" To="1.0"
+                                     BeginTime="00:00:00"
+                                     Duration="00:00:03" />
 
                                 <!--R2 Animation-->
-
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:02"
-                                                 From="250"
-                                                 To="100"
-                                                 Storyboard.TargetProperty="(Ellipse.Width)"
-                                                 Storyboard.TargetName="ER_2" />
-
+                                     Duration="00:00:02"
+                                     From="2.5" To="1"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleX)"
+                                     Storyboard.TargetName="ER_2" />
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:02"
-                                                 From="250"
-                                                 To="100"
-                                                 Storyboard.TargetProperty="(Ellipse.Height)"
-                                                 Storyboard.TargetName="ER_2" />
-
+                                     Duration="00:00:02"
+                                     From="2.5" To="1"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleY)"
+                                     Storyboard.TargetName="ER_2" />
                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                 Storyboard.TargetName="ER_2"
-                                                 From="0.0"
-                                                 To="1.0"
-                                                 BeginTime="00:00:00"
-                                                 Duration="00:00:02" />
+                                     Storyboard.TargetName="ER_2"
+                                     From="0.0" To="1.0"
+                                     BeginTime="00:00:00"
+                                     Duration="00:00:02" />
 
                                 <!--R3 Animation-->
-
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:01"
-                                                 From="200"
-                                                 To="100"
-                                                 Storyboard.TargetProperty="(Ellipse.Width)"
-                                                 Storyboard.TargetName="ER_3" />
-
+                                     Duration="00:00:01"
+                                     From="2" To="1"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleX)"
+                                     Storyboard.TargetName="ER_3" />
                                 <DoubleAnimation BeginTime="00:00:00"
-                                                 Duration="00:00:01"
-                                                 From="200"
-                                                 To="100"
-                                                 Storyboard.TargetProperty="(Ellipse.Height)"
-                                                 Storyboard.TargetName="ER_3" />
-
+                                     Duration="00:00:01"
+                                     From="2" To="1"
+                                     Storyboard.TargetProperty="(Ellipse.RenderTransform).(ScaleTransform.ScaleY)"
+                                     Storyboard.TargetName="ER_3" />
                                 <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                 Storyboard.TargetName="ER_3"
-                                                 From="0.0"
-                                                 To="1.0"
-                                                 BeginTime="00:00:00"
-                                                 Duration="00:00:01" />
+                                     Storyboard.TargetName="ER_3"
+                                     From="0.0" To="1.0"
+                                     BeginTime="00:00:00"
+                                     Duration="00:00:01" />
 
 
                             </Storyboard>
@@ -315,9 +352,6 @@
         <Button x:Name="Close_App"
                 Style="{StaticResource CloseAppStyle}"
                 Click="Close_App_Click" />
-
-
-
 
     </Grid>
 </Window>
